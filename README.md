@@ -1,5 +1,5 @@
 # Projet de Processus de decision Markoviens appliqués la finance
-les fichiers .py correspondant au projet. 
+Les fichiers .py correspondant au projet. 
 
 Sujet : Le problème du secrétaire
 
