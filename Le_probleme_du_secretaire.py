@@ -254,5 +254,62 @@ plt.tight_layout()
 plt.show()
 
 
+#%% comparation strategies tau pour N fixe
+
+
+# Fonction pour comparer les stratégies pour différentes valeurs de tau
+def comparer_strategies_tau(N, simulations, tau_values):
+    """
+    Compare les stratégies pour différentes valeurs de tau en simulant plusieurs fois le processus de sélection.
+
+    Parameters:
+    N (int): Nombre total de candidats
+    simulations (int): Nombre de simulations à effectuer
+    tau_values (array): Différentes valeurs de tau à tester
+
+    Returns:
+    dict: Dictionnaire contenant les probabilités de succès pour chaque valeur de tau
+    """
+    probabilites_tau = []
+    
+    for tau in tau_values:
+        succes_tau = 0
+        for _ in range(simulations):
+            if simulation_strategie_percent(N, tau/N):
+                succes_tau += 1
+        probabilites_tau.append(succes_tau / simulations)
+        print(tau)
+    
+    return probabilites_tau
+
+
+#%% simulation
+
+# Paramètres
+N = 100  # Nombre total de candidats
+simulations = 100000  # Nombre de simulations
+tau_values = range(1, N + 1)  # Différentes valeurs de tau à tester
+
+# Calcul des probabilités de succès pour chaque tau
+probabilites_tau = comparer_strategies_tau(N, simulations, tau_values)
+
+#%% Tracé du graphique
+plt.figure(figsize=(14, 6))
+plt.plot(tau_values, probabilites_tau, marker='.')
+plt.xlabel('Valeur de τ')
+plt.ylabel('Probabilité de Choisir le Meilleur Candidat')
+plt.title(f'Probabilité de Sélectionner le Meilleur Candidat vs τ [N = {N}]')
+plt.axhline(y=1 / np.exp(1), color='r', linestyle='--', label='1 / e')
+
+# Le tau optimal
+tau_optimal = int(np.round(N / np.exp(1),0))
+probabilite_tau_optimal = probabilites_tau[tau_optimal - 1]  # tau_values est indexé à partir de 1
+
+# Ajouter une ligne verticale et un texte pour indiquer le tau optimal
+plt.axvline(x=tau_optimal, color='g', linestyle='--', label=fr'$\tau_{{optimal}} = {tau_optimal}$')
+plt.text(tau_optimal, probabilite_tau_optimal-0.2, fr'$\tau_{{optimal}} = {tau_optimal}$', color='g', ha='left')
+
+plt.legend()
+plt.show()
 
 
